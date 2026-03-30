@@ -29,7 +29,6 @@ from .const import (
     DEFAULT_AUDIO_FORMAT,
     DEFAULT_LANGUAGE,
     DEFAULT_MODEL,
-    DOMAIN,
     MISTRAL_TTS_ENDPOINT,
     PRESET_VOICES,
     SUPPORTED_LANGUAGES,
@@ -41,7 +40,7 @@ _LOGGER = logging.getLogger(__name__)
 API_TIMEOUT = 30
 
 
-async def async_setup_entry(
+async def async_setup_entry(  # noqa: RUF029
     hass: HomeAssistant,
     config_entry: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
