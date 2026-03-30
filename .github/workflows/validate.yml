@@ -1,0 +1,39 @@
+name: Validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install homeassistant voluptuous aiohttp
+
+      - name: Validate manifest.json
+        run: python -c "import json; json.load(open('custom_components/voxtral_tts/manifest.json'))"
+
+      - name: Validate strings.json
+        run: python -c "import json; json.load(open('custom_components/voxtral_tts/strings.json'))"
+
+      - name: Validate translations
+        run: |
+          for f in custom_components/voxtral_tts/translations/*.json; do
+            python -c "import json; json.load(open('$f'))"
+            echo "$f OK"
+          done
+
+      - name: Lint Python
+        run: |
+          pip install ruff
+          ruff check custom_components/voxtral_tts/

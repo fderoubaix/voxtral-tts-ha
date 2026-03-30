@@ -1,0 +1,35 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Voxtral TTS – Mistral AI",
+        "description": "Entrez votre clé API Mistral. Vous pouvez en créer une sur {docs_url}.\n\nL'**ID de voix** est optionnel : laissez-le vide pour utiliser Voxtral sans clonage vocal, ou collez l'ID d'une voix déjà créée dans votre compte Mistral.",
+        "data": {
+          "api_key": "Clé API Mistral",
+          "model": "Modèle",
+          "voice_id": "ID de voix (optionnel)",
+          "audio_format": "Format audio"
+        }
+      }
+    },
+    "error": {
+      "invalid_api_key": "Clé API invalide – veuillez vérifier votre clé Mistral et réessayer.",
+      "cannot_connect": "Impossible de se connecter à l'API Mistral. Vérifiez votre connexion internet."
+    },
+    "abort": {
+      "already_configured": "Cette clé API Mistral est déjà configurée."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Options Voxtral TTS",
+        "data": {
+          "model": "Modèle",
+          "voice_id": "ID de voix (optionnel)",
+          "audio_format": "Format audio"
+        }
+      }
+    }
+  }
+}
