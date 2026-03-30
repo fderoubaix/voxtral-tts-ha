@@ -32,52 +32,30 @@ DEFAULT_LANGUAGE = "fr"
 # and from live API tests (gb_oliver_excited, etc.).
 # English voices have extended named variants on the cloud API.
 # -----------------------------------------------------------------------
+
+# Voix preset CONFIRMÉES par test direct sur l'API Mistral cloud.
+# Seules les voix EN sont confirmées pour l'instant.
+# Les autres langues (FR, ES…) n'ont pas de voice_id validé :
+# Voxtral génère quand même du bon audio sans voice_id pour ces langues.
 PRESET_VOICES: dict[str, list[dict[str, str]]] = {
     "en": [
-        {"id": "casual_male",     "name": "Casual Male (EN)"},
-        {"id": "casual_female",   "name": "Casual Female (EN)"},
-        {"id": "cheerful_female", "name": "Cheerful Female (EN)"},
-        {"id": "neutral_male",    "name": "Neutral Male (EN)"},
-        {"id": "neutral_female",  "name": "Neutral Female (EN)"},
-        # British dialect variants (confirmed on cloud API)
-        {"id": "gb_oliver_excited",  "name": "Oliver – British Excited (EN)"},
-        {"id": "gb_oliver_neutral",  "name": "Oliver – British Neutral (EN)"},
-        {"id": "gb_grace_excited",   "name": "Grace – British Excited (EN)"},
-        {"id": "gb_grace_neutral",   "name": "Grace – British Neutral (EN)"},
+        {"id": "casual_male",       "name": "Casual Male"},
+        {"id": "casual_female",     "name": "Casual Female"},
+        {"id": "cheerful_female",   "name": "Cheerful Female"},
+        {"id": "neutral_male",      "name": "Neutral Male"},
+        {"id": "neutral_female",    "name": "Neutral Female"},
+        {"id": "gb_oliver_excited", "name": "Oliver – British Excited"},
+        {"id": "gb_oliver_neutral", "name": "Oliver – British Neutral"},
+        {"id": "gb_grace_excited",  "name": "Grace – British Excited"},
+        {"id": "gb_grace_neutral",  "name": "Grace – British Neutral"},
     ],
-    "fr": [
-        {"id": "fr_male",   "name": "Homme (FR)"},
-        {"id": "fr_female", "name": "Femme (FR)"},
-    ],
-    "es": [
-        {"id": "es_male",   "name": "Masculino (ES)"},
-        {"id": "es_female", "name": "Femenino (ES)"},
-    ],
-    "de": [
-        {"id": "de_male",   "name": "Männlich (DE)"},
-        {"id": "de_female", "name": "Weiblich (DE)"},
-    ],
-    "it": [
-        {"id": "it_male",   "name": "Maschile (IT)"},
-        {"id": "it_female", "name": "Femminile (IT)"},
-    ],
-    "pt": [
-        {"id": "pt_male",   "name": "Masculino (PT)"},
-        {"id": "pt_female", "name": "Feminino (PT)"},
-    ],
-    "nl": [
-        {"id": "nl_male",   "name": "Mannelijk (NL)"},
-        {"id": "nl_female", "name": "Vrouwelijk (NL)"},
-    ],
-    "hi": [
-        {"id": "hi_male",   "name": "पुरुष (HI)"},
-        {"id": "hi_female", "name": "महिला (HI)"},
-    ],
-    "ar": [
-        {"id": "ar_male",   "name": "ذكر (AR)"},
-        {"id": "ar_female", "name": "أنثى (AR)"},
-    ],
+    # Autres langues : pas de voice_id validé → liste vide (Voxtral choisit la voix)
 }
+
+# Ensemble des IDs valides pour validation rapide avant appel API
+VALID_VOICE_IDS: frozenset[str] = frozenset(
+    v["id"] for voices in PRESET_VOICES.values() for v in voices
+)
 
 
 # Config entry keys

@@ -33,6 +33,7 @@ from .const import (
     MISTRAL_TTS_ENDPOINT,
     PRESET_VOICES,
     SUPPORTED_LANGUAGES,
+    VALID_VOICE_IDS,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -102,7 +103,13 @@ class VoxtralTTSEntity(TextToSpeechEntity):
             opts[ATTR_VOICE] = self._voice_id
         return opts
 
-    async def async_get_supported_voices(self, language: str) -> list[Voice] | None:
+    # ------------------------------------------------------------------
+    # Voice list – données statiques, méthode synchrone
+    # (une méthode async non-awaited dans le handler websocket HA
+    #  provoque un RuntimeWarning ; données statiques = pas besoin d'async)
+    # ------------------------------------------------------------------
+
+    def async_get_supported_voices(self, language: str) -> list[Voice] | None:
         """Retourne les voix preset pour la langue demandée. Aucun appel API."""
         voices = [
             Voice(voice_id=v["id"], name=v["name"])
@@ -121,9 +128,17 @@ class VoxtralTTSEntity(TextToSpeechEntity):
 
         model = options.get(CONF_MODEL, self._model)
         audio_format = options.get(CONF_AUDIO_FORMAT, self._audio_format)
-        voice_id = options.get(ATTR_VOICE, self._voice_id) or None
-        if voice_id == "":
-            voice_id = None
+
+        # Validation du voice_id : on n'envoie à l'API que des IDs connus.
+        # Cela évite que HA transmette un ancien ID Piper (ex: fr_FR-siwis-medium)
+        # et obtienne un 404 de Mistral.
+        raw_voice = options.get(ATTR_VOICE, self._voice_id) or ""
+        voice_id: str | None = raw_voice if raw_voice in VALID_VOICE_IDS else None
+
+        if raw_voice and not voice_id:
+            _LOGGER.debug(
+                "Voxtral: voice_id '%s' non reconnu dans les presets → ignoré", raw_voice
+            )
 
         payload: dict[str, Any] = {
             "model": model,
